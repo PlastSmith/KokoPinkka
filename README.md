@@ -1,0 +1,2 @@
+# KokoPinkka
+ MOOC kurssi
