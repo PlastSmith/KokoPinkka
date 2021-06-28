@@ -1,2 +1,2 @@
 # KokoPinkka
- MOOC kurssi
+ MOOC kurssin kamat
