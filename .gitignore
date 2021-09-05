@@ -1,0 +1,16 @@
+
+# ignore all . files and . folders
+#.*
+
+# ignore all links
+*.lnk
+
+# Ingore stuff in testi folder
+Test*/
+playground*/
+
+# no VSCode workspaces
+*.code-workspace
+
+# no gitignores
+.gitignore	
