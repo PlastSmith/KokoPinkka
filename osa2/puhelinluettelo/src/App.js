@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Filter from './components/Filter'
+import Persons from './components/Persons'
+import PersonForm from './components/PersonForm'
+import personService from './services/persons'
+
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,31 +15,40 @@ const App = () => {
 
   useEffect(() => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
+    personService
+      .getAll()
+      .then(allPersons => {
         console.log('promise fulfilled')
-        setPersons(response.data)
+        setPersons(allPersons)
       })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
     console.log('button clicked', event.target)
-    const rest = persons.find(({ name }) => name === newName)
-    if (rest === undefined) {
-      console.log('not found', rest)
+    const res = persons.find(({ name }) => name === newName)
+    if (res === undefined) {
+      console.log('User doesn not exist', res)
       const personObject = {
         name: newName,
         number: newNumber
       }
-      setPersons(persons.concat(personObject))
-      setNewName('')
+
+      personService
+        .create(personObject)
+        .then(returnedPerson => {
+          console.log(returnedPerson)
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
+        })
+
+
     } else {
-      alert(`${newName} is already adde to phonebook`)
+      alert(`${newName} is already added to phonebook`)
       setNewName('')
       setNewNumber('')
-      console.log(' person found', rest);
+      console.log(' person found', res);
     }
   }
 
@@ -52,35 +66,26 @@ const App = () => {
     console.log(event.target.value);
     setSearchTerm(event.target.value)
     event.target.value === undefined ? setShowAll(true) : setShowAll(false)
-    
   }
 
-  let personsToShow = showAll ? persons : persons.filter(person => person.name.toLowerCase().includes(searchTerm))
+  const personsToShow = showAll ? persons : persons.filter(person => person.name.toLowerCase().includes(searchTerm))
 
   return (
     <div>
       <h2>Phonebook</h2>
       <div>
-      filter shown with<input value={searchTerm} onChange={handleSearchTermChange}/>
+        <Filter searchTerm={searchTerm} handleSearchTermChange={handleSearchTermChange} />
       </div>
-      <br/>
-      <form onSubmit={addPerson}>
-        <div>
-          name: <input value={newName} onChange={handlePersonChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <br />
+      <PersonForm
+        addPerson={addPerson}
+        newName={newName}
+        handlePersonChange={handlePersonChange}
+        newNumber={newNumber}
+        handleNumberChange={handleNumberChange}
+      />
       <h2>Numbers</h2>
-      <ul>
-        {personsToShow.map(person =>
-          <li key={persons.name}>{person.name} {person.number}</li>
-        )}
-      </ul>
+      <Persons personsToShow={personsToShow} />
     </div>
   )
 
