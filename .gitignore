@@ -5,6 +5,9 @@
 # ignore all links
 *.lnk
 
+# ignore .ssh folder
+*.ssh/
+
 # Ingore stuff in testi folder
 Test*/
 playground*/
@@ -13,4 +16,4 @@ playground*/
 *.code-workspace
 
 # no gitignores
-.gitignore	
+#.gitignore	
