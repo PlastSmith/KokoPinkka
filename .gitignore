@@ -9,8 +9,8 @@
 *.ssh/
 
 # Ingore stuff in testi folder
-#Test*/
-#playground*/
+Test*/
+playground*/
 
 # no VSCode workspaces
 *.code-workspace
